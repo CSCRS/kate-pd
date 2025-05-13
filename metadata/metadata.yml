@@ -1,0 +1,23 @@
+metadata_version: 1
+name: 'KATE-PD: Kahramanmaraş Türkiye Earthquake-Post Disaster Dataset'
+description: A post disaster dataset for earthquake damage assessment and an associated
+  benchmark study together with the codes for reproducibility.
+authors:
+- name: Nebiye Musaoğlu
+  affiliations:
+  - name: Istanbul Technical University
+- name: Gülşen Taşkın
+  affiliations:
+  - name: Istanbul Technical University
+- name: Burcu Amirgan
+  affiliations:
+  - name: Istanbul Technical University
+- name: Esra Özaydın
+  affiliations:
+  - name: Istanbul Technical University
+- name: Hasan Nayir
+  affiliations:
+  - name: Payten
+- name: Hüseyin Kaya
+  affiliations:
+  - name: Payten

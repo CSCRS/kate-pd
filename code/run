@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -ex
+
+#########################################################################
+# YOLO Training
+#########################################################################
+# Training takes about 30 minutes. The resulting weights are stored under 
+# 'runs' folder which we should copy to ../results folder to reach its content
+# after each run.
+# 
+# Since it takes considerable time, we commented out the training part.
+# Before publication we run the training and copied the model to
+# data/checkpoints so that it can be used in testing phase.
+#
+# If you have time and computing resources, you can enable training
+# by enabling the following three commands
+#
+#yolo segment train data=../data/katepd/katepd.yaml \
+#    epochs=100 imgsz=512 batch=32 pretrained=True mixup=0.5
+#cp -vr runs ../results
+#cp runs/segment/train/weights/best.pt ../data/checkpoints/best.pt
+
+#########################################################################
+# YOLO testing
+#########################################################################
+
+# ...
+# YOLO visualization
+# ...
+
+#########################################################################
+# SMP Training
+#########################################################################
+# !!! NOTE !!! We commented out the training part because it takes too much time 
+# and consumes significant computational resources.
+# You can uncomment and run it manually when needed.
+#
+# for encoder in resnet18
+# do
+#       python -u train.py --encoder_name $encoder \
+#                         --epoch 50 \
+#                         --data_loader_num_workers 0 \
+#                         --train_batch_size 16
+# done
+
+#########################################################################
+# SMP Prediction
+#########################################################################
+# For each partition
+#  - make predictions via resnet18
+#  - calculate performance metrics
+#
+# !!!! NOTE !!! you can include train, val and test partitions
+# It is recommended to use test or val only and then enable the other
+# partitions for full run.
+
+##for partition in train val test
+##do
+##    python -u test.py  \
+##        --encoder_name resnet18 \
+##        --partition $partition \
+##        --chkpt_path ../data/checkpoints/resnet18_e31_iou_0.32.pth 
+##done
+
+#########################################################################
+# SMP Evaluation and Visualization
+#########################################################################
+##for partition in train val test
+##do
+##    python -u evaluate.py  \
+##        --encoder_name resnet18 \
+##        --partition $partition 
+##done
+
+# Overall visualization
+# ...

@@ -1,0 +1,36 @@
+{
+	"version": 1,
+	"base_image": "registry.codeocean.com/codeocean/pytorch:2.4.0-cuda12.4.0-mambaforge24.5.0-0-python3.12.4-ubuntu22.04",
+	"options": {},
+	"installers": {
+		"apt": {
+			"packages": [
+				{
+					"name": "libgl1-mesa-glx"
+				}
+			],
+			"install_software_properties_common": true
+		},
+		"pip3": {
+			"packages": [
+				{
+					"name": "albumentations"
+				},
+				{
+					"name": "clip"
+				},
+				{
+					"name": "scikit-image"
+				},
+				{
+					"name": "segmentation-models-pytorch"
+				},
+				{
+					"name": "ultralytics"
+				}
+			],
+			"options": {},
+			"pre_install_options": {}
+		}
+	}
+}
