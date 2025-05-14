@@ -41,7 +41,7 @@ do
 done
 
 # Copy YOLO runs to results folder
-cp -r runs ../results/yolo
+#cp -r runs ../results/yolo
 
 #########################################################################
 # SMP Training
