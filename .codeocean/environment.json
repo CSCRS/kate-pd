@@ -6,7 +6,8 @@
 		"apt": {
 			"packages": [
 				{
-					"name": "libgl1-mesa-glx"
+					"name": "libgl1-mesa-glx",
+					"version": "23.0.4-0ubuntu1~22.04.1"
 				}
 			],
 			"install_software_properties_common": true
@@ -14,19 +15,24 @@
 		"pip3": {
 			"packages": [
 				{
-					"name": "albumentations"
+					"name": "albumentations",
+					"version": "1.4.18"
 				},
 				{
-					"name": "clip"
+					"name": "clip",
+					"version": "0.2.0"
 				},
 				{
-					"name": "scikit-image"
+					"name": "scikit-image",
+					"version": "0.25.2"
 				},
 				{
-					"name": "segmentation-models-pytorch"
+					"name": "segmentation-models-pytorch",
+					"version": "0.3.4"
 				},
 				{
-					"name": "ultralytics"
+					"name": "ultralytics",
+					"version": "8.3.120"
 				}
 			],
 			"options": {},
