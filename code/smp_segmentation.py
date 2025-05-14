@@ -137,6 +137,8 @@ class ResultsManager:
         self.gt_dir = os.path.join("../data/katepd/labels/", self.args.partition)
         self.pred_dir = os.path.join("../results", self.args.encoder_name, self.args.partition)
 
+        os.makedirs(self.pred_dir, exist_ok=True)
+    
         self.image_files = sorted(os.listdir(self.image_dir))
         self.gt_files = sorted(os.listdir(self.gt_dir))
         self.pred_files = sorted(os.listdir(self.pred_dir))
@@ -179,7 +181,7 @@ class ResultsManager:
 
         mIoU = (iou_0 + iou_1) / 2
         accuracy = (TP + TN) / (TP + TN + FP + FN + 1e-7)
-        save_path = f"../results/{self.args.partition}_scores.txt"
+        save_path = f"../results/{self.args.encoder_name}/{self.args.partition}_scores.txt"
         with open(save_path, "w") as f:
             f.write(f"Model: {self.args.encoder_name}\n")
             f.write("-" * 40 + "\n")
@@ -232,8 +234,10 @@ class ResultsManager:
             iou = (intersection + 1e-7) / (union + 1e-7)
             
             iou_list.append((iou, img_file, gt_file, pred_file))
-
-        iou_list.sort(reverse=True, key=lambda x: x[0])
+        
+        # Disable the sort to visualize the same images for each method/encoder
+        # Otherwise, the images will be sorted by IoU in descending order
+        #iou_list.sort(reverse=True, key=lambda x: x[0])
 
         num_images = min(self.args.max_images, len(iou_list))
         selected = iou_list[:num_images]
@@ -305,7 +309,7 @@ class ResultsManager:
         )
 
         fig.subplots_adjust(left=0.05, right=0.95, bottom=0.05, top=0.95, hspace=0.1, wspace=0.05)
-        save_path = f"../results/{self.args.partition}_plots.pdf"
+        save_path = f"../results/{self.args.encoder_name}/{self.args.partition}_plots.pdf"
         plt.savefig(save_path, format="pdf", bbox_inches="tight")
         plt.close()
 

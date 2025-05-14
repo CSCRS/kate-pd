@@ -5,7 +5,7 @@ import pathlib
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Testing")
-    parser.add_argument('--encoder_name', required=True, choices=['resnet18']) 
+    parser.add_argument('--encoder_name', required=True, choices=['resnet18','yolo']) 
     parser.add_argument('--partition', required=True, choices=['train', 'val', 'test']) 
     parser.add_argument('--max_images', required=False, default=12, type=int)
 

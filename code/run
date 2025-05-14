@@ -15,18 +15,33 @@ set -ex
 # If you have time and computing resources, you can enable training
 # by enabling the following three commands
 #
-#yolo segment train data=../data/katepd/katepd.yaml \
+## yolo segment train data=../data/katepd/katepd.yaml \
 #    epochs=100 imgsz=512 batch=32 pretrained=True mixup=0.5
-#cp -vr runs ../results
-#cp runs/segment/train/weights/best.pt ../data/checkpoints/best.pt
+## cp runs/segment/train/weights/best.pt ../data/checkpoints/best.pt
 
 #########################################################################
-# YOLO testing
+# YOLO Predictions
 #########################################################################
+for partition in train val test
+do
+    python -u yolo_test.py  \
+        --model ../data/checkpoints/best.pt \
+        --input-folder ../data/katepd/images/$partition \
+        --output-folder ../results/yolo/$partition 
+done
 
-# ...
-# YOLO visualization
-# ...
+#########################################################################
+# YOLO Evaluation and Visualization
+#########################################################################
+for partition in train val test
+do
+    python -u evaluate.py  \
+        --encoder_name yolo \
+        --partition $partition 
+done
+
+# Copy YOLO runs to results folder
+cp -r runs ../results/yolo
 
 #########################################################################
 # SMP Training
@@ -35,13 +50,14 @@ set -ex
 # and consumes significant computational resources.
 # You can uncomment and run it manually when needed.
 #
-# for encoder in resnet18
-# do
-#       python -u train.py --encoder_name $encoder \
-#                         --epoch 50 \
-#                         --data_loader_num_workers 0 \
-#                         --train_batch_size 16
-# done
+##for encoder in resnet18
+##do
+##    python -u train.py \
+##        --encoder_name $encoder \
+##        --epoch 50 \
+##        --data_loader_num_workers 0 \
+##        --train_batch_size 16
+##done
 
 #########################################################################
 # SMP Prediction
@@ -54,23 +70,20 @@ set -ex
 # It is recommended to use test or val only and then enable the other
 # partitions for full run.
 
-##for partition in train val test
-##do
-##    python -u test.py  \
-##        --encoder_name resnet18 \
-##        --partition $partition \
-##        --chkpt_path ../data/checkpoints/resnet18_e31_iou_0.32.pth 
-##done
+for partition in train val test
+do
+    python -u test.py  \
+        --encoder_name resnet18 \
+        --partition $partition \
+        --chkpt_path ../data/checkpoints/resnet18_e31_iou_0.32.pth 
+done
 
 #########################################################################
 # SMP Evaluation and Visualization
 #########################################################################
-##for partition in train val test
-##do
-##    python -u evaluate.py  \
-##        --encoder_name resnet18 \
-##        --partition $partition 
-##done
-
-# Overall visualization
-# ...
+for partition in train val test
+do
+    python -u evaluate.py  \
+        --encoder_name resnet18 \
+        --partition $partition 
+done
