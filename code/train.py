@@ -4,9 +4,9 @@ import argparse
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Training")
-    parser.add_argument('--encoder_name', required=True, choices=['resnet18']) 
+    parser.add_argument('--encoder_name', required=True, choices=['resnet18', 'resnet152']) 
     parser.add_argument('--batch_size', required=False, default=4, type=int)
-    parser.add_argument('--lr', required=False, default=0.001, type=float)
+    parser.add_argument('--lr', required=False, default=0.0001, type=float)
     parser.add_argument('--epoch', required=False, default=20, type=int)
     parser.add_argument('--data_loader_num_workers', required=False, default=4, type=int)
 
