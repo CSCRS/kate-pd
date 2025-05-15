@@ -56,7 +56,7 @@ done
 ##        --encoder_name $encoder \
 ##        --epoch 50 \
 ##        --data_loader_num_workers 0 \
-##        --train_batch_size 16
+##        --batch_size 16
 ##done
 
 #########################################################################
