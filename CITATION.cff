@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Musaoglu"
+  given-names: "Nebiye"
+- family-names: "Taskin"
+  given-names: "Gulsen"
+- family-names: "Amirgan"
+  given-names: "Burcu"
+- family-names: "Özaydın"
+  given-names: "Esra"
+- family-names: "Nayir"
+  given-names: "Hasan"
+- family-names: "Kaya"
+  given-names: "Huseyin"
+title: "A Rapid Damage Assessment Using Remote Sensing: Kahramanmaraş Türkiye Post Disaster Dataset: KATE-PD"
+version: 1
+date-released: 2025-05-15
+url: "https://github.com/cscrs/kate-pd"
