@@ -23,7 +23,8 @@
 					"version": "0.2.0"
 				},
 				{
-					"name": "datasets"
+					"name": "datasets",
+					"version": "3.6.0"
 				},
 				{
 					"name": "scikit-image",
