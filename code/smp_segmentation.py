@@ -64,7 +64,7 @@ class PolygonSegmentationDataset(Dataset):
             patch = augmented["image"]
             mask = augmented["mask"]
 
-        patch = torch.from_numpy(patch).permute(2, 0, 1).float() / 255.0  # (C, H, W)
+        patch = torch.from_numpy(patch).permute(2, 0, 1).float()  # (C, H, W)
         mask = torch.from_numpy(mask).unsqueeze(0).float() / 255.0         # (1, H, W)
 
         return patch, mask
@@ -144,11 +144,14 @@ class ResultsManager:
         self.pred_files = sorted(os.listdir(self.pred_dir))
         
     def generate_results_metrics(self):
-        TP = 0
-        FP = 0
-        TN = 0
-        FN = 0
-        iou_scores = []
+        metrics = {'precision': [], 
+                   'recall': [], 
+                   'iou_0': [],
+                   'iou_1': [],
+                   'miou': [],
+                   'accuracy': [],
+                   'f1': []}
+
         
         for img_file, gt_file, pred_file in zip(self.image_files, self.gt_files, self.pred_files):
             img = np.array(Image.open(os.path.join(self.image_dir, img_file))).astype(np.float32)/255.0
@@ -160,38 +163,34 @@ class ResultsManager:
             gt = (gt > 0.5).astype(np.uint8) 
             pred = (pred > 0.5).astype(np.uint8) 
 
-            TP += np.sum((pred == 1) & (gt == 1))
-            FP += np.sum((pred == 1) & (gt == 0))
-            TN += np.sum((pred == 0) & (gt == 0))
-            FN += np.sum((pred == 0) & (gt == 1))
+            TP = np.sum((pred == 1) & (gt == 1))
+            FP = np.sum((pred == 1) & (gt == 0))
+            TN = np.sum((pred == 0) & (gt == 0))
+            FN = np.sum((pred == 0) & (gt == 1))
 
+            precision = TP / (TP + FP + 1e-7)
+            recall = TP / (TP + FN + 1e-7)
+            f1 = 2 * precision * recall / (precision + recall + 1e-7)
+            iou_0 = (TN + 1e-7) / (TN + FP + FN + 1e-7)
+            iou_1 = (TP + 1e-7) / (TP + FN + FP + 1e-7)
+            miou = (iou_0 + iou_1) / 2
+            accuracy = (TP + TN) / (TP + TN + FP + FN + 1e-7)
+            
+            metrics['precision'].append(precision)
+            metrics['recall'].append(recall)
+            metrics['f1'].append(f1)
+            metrics['iou_0'].append(iou_0)
+            metrics['iou_1'].append(iou_1)
+            metrics['miou'].append(miou)
+            metrics['accuracy'].append(accuracy)
+            metrics['f1'].append(f1)
 
-            intersection = np.logical_and(pred, gt).sum()
-            union = np.logical_or(pred, gt).sum()
-            iou = (intersection + 1e-7) / (union + 1e-7)
-            iou_scores.append(iou)
-
-
-        precision = TP / (TP + FP + 1e-7)
-        recall = TP / (TP + FN + 1e-7)
-        f1 = 2 * precision * recall / (precision + recall + 1e-7)
-
-        iou_0 = (TN + 1e-7) / (TN + FP + FN + 1e-7)
-        iou_1 = np.mean(iou_scores)
-
-        mIoU = (iou_0 + iou_1) / 2
-        accuracy = (TP + TN) / (TP + TN + FP + FN + 1e-7)
         save_path = f"../results/{self.args.encoder_name}/{self.args.partition}_scores.txt"
         with open(save_path, "w") as f:
             f.write(f"Model: {self.args.encoder_name}\n")
             f.write("-" * 40 + "\n")
-            f.write(f"Precision: {precision:.4f}\n")
-            f.write(f"Recall: {recall:.4f}\n")
-            f.write(f"IoU0: {iou_0:.4f}\n")
-            f.write(f"IoU1: {iou_1:.4f}\n")
-            f.write(f"mIoU: {mIoU:.4f}\n")
-            f.write(f"Accuracy: {accuracy:.4f}\n")
-            f.write(f"F1 Score: {f1:.4f}\n")
+            for k, v in metrics.items():
+                f.write(f"{k}: {np.mean(v):.4f}\n")
 
         print(f"Metrics saved to {save_path}")
         
