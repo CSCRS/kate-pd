@@ -104,7 +104,7 @@ class Segmentation():
                 best_iou_score = val_logs["iou_score"]
                 print('saving model')
                 model_name = f"{args.encoder_name}_e{epoch}_iou_{round(best_iou_score,2)}.pth"
-                torch.save(model, os.path.join("../data/checkpoints", model_name))
+                torch.save(model, os.path.join("../results", model_name))
     
     def test(self, loader, args):
         model = torch.load(args.chkpt_path, map_location=self.device)
