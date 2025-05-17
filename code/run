@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -ex
 
+# Creating results folders
+mkdir -p ../results/yolo
+mkdir -p ../results/resnet152
+
+# The models used for predictions. They are overwritten
+# if training scripts are enabled.
+best_yolo_model=../data/checkpoints/yolo_best.pt
+best_resnet152_model=../data/checkpoints/resnet152_e14_iou_0.36.pth
+
 #########################################################################
 # YOLO Training
 #########################################################################
@@ -15,21 +24,28 @@ set -ex
 # If you have time and computing resources, you can enable training
 # by enabling the following three commands
 #
+# A side note for the nerds: after training we copy the model to ../results
+# folder which is ok we want to use the model in the same run. However,
+# if you want to share the model accross different runs, we have to download
+# and then upload to ../data/checkpoints to make it permanent which I did
+# during the preparation of this capsule. 
+#
 ## yolo segment train data=../data/katepd/katepd.yaml \
 #    epochs=100 imgsz=512 batch=32 pretrained=True mixup=0.5
-## cp runs/segment/train/weights/best.pt ../data/checkpoints/best.pt
-
+#cp -r runs ../results/yolo
+#best_yolo_model=../results/yolo/runs/segment/train/weights/best.pt
+ 
 #########################################################################
 # YOLO Predictions
 #########################################################################
 for partition in train val test
 do
     python -u yolo_test.py  \
-        --model ../data/checkpoints/best.pt \
+        --model $best_yolo_model \
         --input-folder ../data/katepd/images/$partition \
         --output-folder ../results/yolo/$partition 
 done
-
+ 
 #########################################################################
 # YOLO Evaluation and Visualization
 #########################################################################
@@ -40,9 +56,6 @@ do
         --partition $partition 
 done
 
-# Copy YOLO runs to results folder
-#cp -r runs ../results/yolo
-
 #########################################################################
 # SMP Training
 #########################################################################
@@ -50,14 +63,19 @@ done
 # and consumes significant computational resources.
 # You can uncomment and run it manually when needed.
 #
-##for encoder in resnet18
+##for encoder in resnet152
 ##do
 ##    python -u train.py \
 ##        --encoder_name $encoder \
-##        --epoch 50 \
+##        --epoch 20 \
 ##        --data_loader_num_workers 0 \
-##        --batch_size 16
+##        --batch_size 4
 ##done
+### The models are saved to ../results.
+### Don't forget to comment out this too when you enable training
+##best_resnet152_model=$(ls -t ../results/resnet152*.pth 2>/dev/null | head -n 1)
+##echo "Best model $best_resnet152_model" 
+
 
 #########################################################################
 # SMP Prediction
@@ -69,13 +87,12 @@ done
 # !!!! NOTE !!! you can include train, val and test partitions
 # It is recommended to use test or val only and then enable the other
 # partitions for full run.
-
 for partition in train val test
 do
     python -u test.py  \
-        --encoder_name resnet18 \
+        --encoder_name resnet152 \
         --partition $partition \
-        --chkpt_path ../data/checkpoints/resnet18_e31_iou_0.32.pth 
+        --chkpt_path $best_resnet152_model 
 done
 
 #########################################################################
@@ -84,6 +101,6 @@ done
 for partition in train val test
 do
     python -u evaluate.py  \
-        --encoder_name resnet18 \
+        --encoder_name resnet152 \
         --partition $partition 
 done
