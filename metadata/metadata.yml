@@ -1,7 +1,20 @@
 metadata_version: 1
 name: 'KATE-PD: Kahramanmaraş Türkiye Earthquake-Post Disaster Dataset'
-description: A post disaster dataset for earthquake damage assessment and an associated
-  benchmark study together with the codes for reproducibility.
+description: This capsule introduces the KATE-PD (KAhramanmaras Türkiye Earthquake
+  Post Disaster) dataset, a valuable resource for the remote sensing and disaster
+  response community. KATE-PD provides detailed annotations of collapsed buildings
+  over a 3,293 square kilometer area, based on multi-source high-resolution satellite
+  imagery—offering a level of detail that complements and expands upon existing datasets.
+  This dataset is particularly crucial for machine learning algorithms focused on
+  damage detection from single post-earthquake images, enhancing the ability to assess
+  damage quickly and accurately.
+tags:
+- remote sensing
+- earthquake
+- damage assessment
+- dataset
+- YOLO
+- segmentation
 authors:
 - name: Nebiye Musaoğlu
   affiliations:
