@@ -92,15 +92,20 @@ def create_dataset(image_folder, label_folder, mask_folder):
     for path in label_paths:
         with open(path, 'r') as f:
             label_texts.append(f.read())
+    names = []
+    for path in image_paths:
+        names.append(os.path.basename(path))
         
     # Create a Dataset
     dataset = Dataset.from_dict({
         "image": image_paths,
         "label": label_texts,
-        "mask": mask_paths
+        "mask": mask_paths,
+        "name": names
     })
 
     # Cast columns to Image format
+    dataset = dataset.cast_column("name", Value('string'))
     dataset = dataset.cast_column("image", Image())
     dataset = dataset.cast_column("label", Value('string'))
     dataset = dataset.cast_column("mask", Image())
