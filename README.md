@@ -1,23 +1,88 @@
 # Welcome to the KATE-PD Dataset
-Welcome to the home page of Kahramanmaraş Türkiye Earthquake-Post Disaster Dataset (KATE-PD). If you are reading this README, you are probably visiting one of the following places to learn more about **KATE-PD Dataset** and the associated study "*A Rapid Damage Assessment Using Remote Sensing: Kahramanmaraş Türkiye Post Disaster Datasets*", to be presented in the IEEE International Geoscience and Remote Sensing Symposium ([IGARSS 2025](https://www.2025.ieeeigarss.org/)). 
+Welcome to the home page of Kahramanmaraş Türkiye Earthquake-Post Disaster Dataset (KATE-PD). If you are reading this README, you are probably visiting one of the following places to learn more about **KATE-PD Dataset** and the associated study "*A Rapir Damage Assessment using Remote Sensing: Türkiye 2023 Post-Earthquake Dataset: KATE-PD*", to be presented in the IEEE International Geoscience and Remote Sensing Symposium ([IGARSS 2025](https://www.2025.ieeeigarss.org/)). 
 
-* [Code Ocean Capsule](https://codeocean.com/capsule/8064763) in [Open Science Library](https://codeocean.com/explore) 
+* [Code Ocean Capsule](https://doi.org/10.24433/CO.8064763.v1) in [Open Science Library](https://codeocean.com/explore) 
 * [GitHub Repository](https://github.com/cscrs/kate-pd)
 * [HuggingFace](https://huggingface.co/datasets/cscrs/kate-pd)
 
-The **KATE-PD Dataset** and the associated codes and supplementary information are published in three places i.e. CodeOcean, GitHub and HuggingFAce for providing redundancy and extended reach. All of the content uploaded to the three websites are the same except small differences because of platform requirements. The CodeOcean platform is mainly used for reproducibility, whereas GitHub is used to provide git access and hence easy collaboration between **KATE-PD Dataset** developers. Finally HuggingFace provides an easy access to the database where you can run existing models in HuggingFace on KATE-PD without too much effort.
+The **KATE-PD Dataset** and the associated codes and supplementary information (630 MB in total) are published in three places i.e. CodeOcean, GitHub and HuggingFace for providing redundancy and extended reach. All of the content uploaded to the three websites are the same except small differences because of platform requirements. The CodeOcean platform is mainly used for reproducibility, whereas GitHub is used to provide git access and hence easy collaboration between **KATE-PD Dataset** developers. Finally HuggingFace provides an easy access to the database where you can run existing models in HuggingFace on KATE-PD without too much effort.
 
 ## Content of the KATE-PD Dataset
-The KATE-PD dataset is designed to facilitate the development and evaluation of earthquake damage assessment algorithms on post disaster images. It provides high-resolution satellite imagery from post-earthquake events, specifically covering the regions affected by the Kahramanmaraş earthquake in Türkiye. Given the scarcity of earthquake damage assessment datasets, KATE-PD aims to bridge this gap by offering high-quality annotated data, enabling researchers to train and test machine learning models for damage assessment. If you are looking for a dataset suitable for change detection algorithms, you can visit our sister project [KATE-CD: Kahramanmaraş Türkiye Earthquake-Change Detection Dataset](10.24433/CO.3747729.v1).
+The KATE-PD dataset is designed to facilitate the development and evaluation of earthquake damage assessment algorithms on post disaster images. It provides high-resolution satellite imagery from post-earthquake events, specifically covering the regions affected by the Kahramanmaraş earthquake in Türkiye. Given the scarcity of earthquake damage assessment datasets, KATE-PD aims to bridge this gap by offering high-quality annotated data, enabling researchers to train and test machine learning models for damage assessment. If you are looking for a dataset suitable for change detection algorithms, you can visit our sister project [KATE-CD: Kahramanmaraş Türkiye Earthquake-Change Detection Dataset](https://doi.org/10.24433/CO.3747729.v1).
+
+The directory structure of **KATE-PD Dataset** is:
+
+    |-- metadata
+    |   |-- metadata.yml                  # used by CodeOcean 
+    |-- environment
+    |   |-- Dockerfile                    # used by CodeOcean & VSCode  
+    |-- code 
+    |   |-- utils
+    |   |   |-- create_cover_image.py
+    |   |   |-- hf_update_db.py           # to update HuggingFace DB
+    |   |   |-- yolo_to_geojson.py        
+    |   |-- evaluate.py
+    |   |-- LICENSE
+    |   |-- run                           # main entrypoint for CodeOcean
+    |   |-- smp_segmentation.py
+    |   |-- test.py
+    |   |-- train.py
+    |   |-- utils.py
+    |   |-- yolo_test.py
+    |-- data
+    |   |-- checkpoints
+    |   |   |-- resnet152_e14_iou_0.36.pth # published SMP Model
+    |   |   |-- yolo_best.py               # published YOLO Model
+    |   |-- katepd                         # dataset in YOLO format
+    |   |   |-- images
+    |   |   |   |-- train
+    |   |   |   |   |-- trn_tile_177_patch_1.png
+    |   |   |   |   |-- ...
+    |   |   |   |-- val
+    |   |   |   |   |-- val_tile_182_patch_6.png
+    |   |   |   |   |-- ...
+    |   |   |   |-- test
+    |   |   |   |   |-- tst_tile_188_patch_12.png
+    |   |   |   |   |-- ...
+    |   |   |-- labels
+    |   |   |   |-- train
+    |   |   |   |   |-- trn_tile_177_patch_1.txt
+    |   |   |   |   |-- ...
+    |   |   |   |-- val
+    |   |   |   |   |-- val_tile_182_patch_6.txt
+    |   |   |   |   |-- ...
+    |   |   |   |-- test
+    |   |   |   |   |-- tst_tile_188_patch_12.txt
+    |   |   |   |   |-- ...
+    |   |   |-- classes.txt
+    |   |   |-- katepd.yaml
+    |   |-- preprocessing     # extra information for database
+    |   |   |-- grid_maxar.geojson
+    |   |   |-- grid_pleidas.geojson
+    |   |   |-- history_maxar.json
+    |   |   |-- history_pleidas.json
+    |   |   |-- katepd_polygons.geojson
+    |   |   |-- label_studio_annotations.csv
+    |   |   |-- label_studio_files.txt  
+    |   |   |-- README.md
+    |   |-- LICENSE
+    |-- .codeocean        # CodeOcean computing environment info
+    |   |-- environment.json
+    |-- .gitignore
+    |-- results           # to store CodeOcean capsule results
+    |-- .devcontainer     # for VSCode DevContainers 
+    |   |-- devcontainer.json
+    |-- CITATION.cff      # provides Cite link in GitHub repo
+    |-- README.md        
 
 ### Source of Satellite Imagery
 The dataset includes satellite images from Maxar Open Data and Airbus Pleiades, covering seven heavily affected cities: Adıyaman, Gaziantep, Hatay, Kahramanmaraş, Kilis, Osmaniye, and Malatya. These images have a resolution ranging from 0.3m to 0.5m. The collection process involved selecting imagery captured under various lighting conditions, using different sensors and viewing angles. The coordinate reference system EPSG:32637 was chosen for consistency, and radiometrically corrected images with 8-bit spectral resolution were used to maintain uniform color representation across sources.
 
 ### Labelling Process
-A grid-based labeling approach was used to divide the images into 512×512 pixel patches. The Label Studio tool was employed for manual annotation, where post-earthquake images were reviewed, and damaged buildings were marked with polygonal annotations. A binary labeling strategy was applied, where pixels inside damage polygons were assigned a value of 1, and all others were set to 0.
+A grid-based labeling approach was used to divide the images into 512×512 pixel patches. The Label Studio tool was employed for manual annotation, where post-earthquake images were reviewed, and damaged buildings were marked with polygonal annotations. A binary labeling strategy was applied, where pixels inside damage polygons were assigned a value of 1, and all others were set to 0. During labelling, no extra information other than the post-images is used. 
 
 ### Machine-Learning Ready Format
-The main structure of the dataset provided in CodeOcean is formatted in YOLO format under */data/katepd* folder where post-disaster images are provided as PNG files and the polygons are encoded in TXT files. The files are also organized with respect to partitions. On HuggingFace, we also created mask files (by combining image and label pairs) for those not willing to work with polygons. Due to limitations on large files, we don't include the dataset on GitHub.
+The main structure of the dataset provided in CodeOcean is formatted in YOLO format under */data/katepd* folder where post-disaster images are provided as PNG files and the polygons are encoded in TXT files. The files are also organized with respect to partitions: train (%80), val (%10) and test (%10).  On HuggingFace, we also created mask files (by combining image and label pairs) for those not willing to work with polygons. Due to limitations on large files, we don't include the dataset on GitHub.
 
 ## Reproducibility: CodeOcean
 The dataset is published on three platforms: CodeOcean, GitHub and HuggingFace. The purpose of CodeOcean is to provide data, codes and the computing instructions to reproduce the results. CodeOcean uses the term *capsule* to define the collection of everything needed to reproduce the results. Depending on your goal and your time constraints, CodeOcean provide two alternatives to run the capsule and obtain the results: via Open Science Library or Capsule Export.
@@ -55,13 +120,14 @@ docker run --platform linux/amd64 --rm \
 ## Published results
 In the results folder of the CodeOcean capsule, you can reach the pre-computed outputs of the code or you can generate them from scratch with single-click in CodeOcean. In either case, these outputs correspond to the published content in the manuscript. The mapping between capsule results and the content in the manuscript is as follows:
 
-    Code            CodeOcean           Manuscript
-    ------------    ------------------  ----------
-    evaluate.py     */val_scores.txt    Table II
+    Code            CodeOcean Results        Manuscript
+    ------------    -----------------------  ----------
+    evaluate.py     */val_scores.txt         Table II
                     */train_scores.txt
                     */test_scores.txt 
-    evaluate.py     yolo/test_plots.pdf Figure 2
-    ---------------------------------------------
+    evaluate.py     yolo/test_plots.pdf      Figure 2
+                    resnet152/test_plots.pdf Figure 2
+    -------------------------------------------------
 
 ## For Developers
 ### Differences between the platforms:
